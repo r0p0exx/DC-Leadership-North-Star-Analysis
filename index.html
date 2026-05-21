@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Leadership North Star — Mobile Experience Research Analysis</title>
+<style>
+  :root {
+    --wm-blue: #0071dc;
+    --wm-blue-dark: #004c91;
+    --wm-blue-light: #e6f2ff;
+    --wm-yellow: #ffc220;
+    --wm-yellow-light: #fff8e1;
+    --wm-green: #2e7d32;
+    --wm-green-light: #e8f5e9;
+    --wm-red: #c62828;
+    --wm-red-light: #fce4ec;
+    --wm-orange: #ef6c00;
+    --wm-orange-light: #fff3e0;
+    --wm-purple: #6a1b9a;
+    --wm-purple-light: #f3e5f5;
+    --wm-teal: #00695c;
+    --wm-teal-light: #e0f2f1;
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #eeeeee;
+    --gray-300: #e0e0e0;
+    --gray-400: #bdbdbd;
+    --gray-500: #9e9e9e;
+    --gray-600: #757575;
+    --gray-700: #616161;
+    --gray-800: #424242;
+    --gray-900: #212121;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: var(--gray-900); background: var(--gray-100); line-height: 1.6; }
+
+  /* NAV */
+  .sidenav { position:fixed; top:0; left:0; width:260px; height:100vh; background:#fff; border-right:1px solid var(--gray-200); z-index:100; overflow-y:auto; padding:20px 0; }
+  .sidenav .logo { padding:0 20px 20px; border-bottom:1px solid var(--gray-200); margin-bottom:12px; }
+  .sidenav .logo h2 { font-size:14px; font-weight:700; color:var(--wm-blue); letter-spacing:0.5px; text-transform:uppercase; }
+  .sidenav .logo p { font-size:11px; color:var(--gray-500); margin-top:2px; }
+  .sidenav a { display:flex; align-items:center; padding:9px 20px; font-size:13px; color:var(--gray-700); text-decoration:none; transition:all 0.15s; border-left:3px solid transparent; }
+  .sidenav a:hover { background:var(--wm-blue-light); color:var(--wm-blue); }
+  .sidenav a.active { background:var(--wm-blue-light); color:var(--wm-blue); border-left-color:var(--wm-blue); font-weight:600; }
+  .sidenav a .nav-num { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--gray-200); color:var(--gray-600); font-size:11px; font-weight:600; margin-right:10px; flex-shrink:0; }
+  .sidenav a.active .nav-num { background:var(--wm-blue); color:#fff; }
+
+  /* MAIN */
+  .main { margin-left:260px; padding:32px 40px 60px; max-width:1200px; }
+
+  /* SECTION */
+  section { margin-bottom:48px; }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:12px; border-bottom:2px solid var(--gray-200); }
+  .section-num { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:var(--wm-blue); color:#fff; font-size:15px; font-weight:700; flex-shrink:0; }
+  .section-header h2 { font-size:22px; font-weight:700; color:var(--gray-900); }
+
+  /* CARDS */
+  .card { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:24px; margin-bottom:20px; border:1px solid var(--gray-200); }
+  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .card-header h3 { font-size:16px; font-weight:600; color:var(--gray-800); }
+  .card-header .badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+
+  /* GRID */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media(max-width:900px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+
+  /* STAT CARDS */
+  .stat-card { background:#fff; border-radius:var(--radius-sm); padding:20px; text-align:center; border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); }
+  .stat-card .stat-val { font-size:32px; font-weight:800; color:var(--wm-blue); }
+  .stat-card .stat-label { font-size:12px; color:var(--gray-600); margin-top:4px; text-transform:uppercase; letter-spacing:0.5px; }
+
+  /* TABLES */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { background:var(--gray-100); padding:10px 14px; text-align:left; font-weight:600; color:var(--gray-700); border-bottom:2px solid var(--gray-300); font-size:12px; text-transform:uppercase; letter-spacing:0.5px; }
+  td { padding:10px 14px; border-bottom:1px solid var(--gray-200); vertical-align:top; }
+  tr:hover td { background:var(--gray-50); }
+
+  /* TAGS */
+  .tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; margin:2px; }
+  .tag-blue { background:var(--wm-blue-light); color:var(--wm-blue-dark); }
+  .tag-green { background:var(--wm-green-light); color:var(--wm-green); }
+  .tag-red { background:var(--wm-red-light); color:var(--wm-red); }
+  .tag-orange { background:var(--wm-orange-light); color:var(--wm-orange); }
+  .tag-purple { background:var(--wm-purple-light); color:var(--wm-purple); }
+  .tag-teal { background:var(--wm-teal-light); color:var(--wm-teal); }
+  .tag-yellow { background:var(--wm-yellow-light); color:#b38600; }
+
+  /* BARS */
+  .bar-chart { margin:8px 0; }
+  .bar-row { display:flex; align-items:center; margin-bottom:8px; }
+  .bar-label { width:200px; font-size:13px; color:var(--gray-700); flex-shrink:0; }
+  .bar-track { flex:1; height:24px; background:var(--gray-200); border-radius:4px; overflow:hidden; position:relative; }
+  .bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:600; color:#fff; transition:width 0.6s ease; }
+  .bar-count { margin-left:8px; font-size:12px; color:var(--gray-600); flex-shrink:0; }
+
+  /* CALLOUT */
+  .callout { padding:16px 20px; border-radius:var(--radius-sm); margin-bottom:16px; border-left:4px solid; }
+  .callout-blue { background:var(--wm-blue-light); border-color:var(--wm-blue); }
+  .callout-green { background:var(--wm-green-light); border-color:var(--wm-green); }
+  .callout-orange { background:var(--wm-orange-light); border-color:var(--wm-orange); }
+  .callout-red { background:var(--wm-red-light); border-color:var(--wm-red); }
+  .callout-purple { background:var(--wm-purple-light); border-color:var(--wm-purple); }
+  .callout h4 { font-size:14px; margin-bottom:4px; }
+  .callout p, .callout li { font-size:13px; color:var(--gray-800); }
+
+  /* QUOTE */
+  .quote { position:relative; padding:16px 20px 16px 48px; background:var(--gray-50); border-radius:var(--radius-sm); margin-bottom:12px; font-style:italic; color:var(--gray-700); font-size:14px; border:1px solid var(--gray-200); }
+  .quote::before { content:'\201C'; position:absolute; left:14px; top:8px; font-size:40px; color:var(--wm-blue); font-style:normal; line-height:1; }
+  .quote .quote-attr { display:block; font-style:normal; font-weight:600; color:var(--gray-800); margin-top:6px; font-size:12px; }
+
+  /* JOURNEY */
+  .journey-phase { display:flex; align-items:stretch; margin-bottom:2px; }
+  .journey-time { width:80px; padding:12px 8px; text-align:center; font-size:12px; font-weight:600; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; border-radius:6px 0 0 6px; }
+  .journey-content { flex:1; padding:12px 16px; background:#fff; border:1px solid var(--gray-200); border-left:0; border-radius:0 6px 6px 0; }
+  .journey-content h4 { font-size:14px; color:var(--gray-800); margin-bottom:4px; }
+  .journey-content p { font-size:12px; color:var(--gray-600); }
+  .journey-content .j-systems { margin-top:4px; }
+
+  /* FLOW DIAGRAM */
+  .flow { display:flex; align-items:center; justify-content:center; gap:0; margin:24px 0; flex-wrap:wrap; }
+  .flow-step { padding:16px 24px; border-radius:var(--radius-sm); text-align:center; min-width:180px; }
+  .flow-step h4 { font-size:15px; margin-bottom:6px; }
+  .flow-step p { font-size:12px; }
+  .flow-arrow { font-size:28px; color:var(--gray-400); padding:0 4px; }
+
+  /* PARTICIPANT CARD */
+  .participant-card { background:#fff; border-radius:var(--radius); padding:20px; border:1px solid var(--gray-200); box-shadow:var(--shadow-sm); }
+  .participant-card h4 { font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:2px; }
+  .participant-card .role { font-size:12px; color:var(--wm-blue); font-weight:600; margin-bottom:10px; }
+  .participant-card .meta { font-size:12px; color:var(--gray-600); line-height:1.8; }
+  .participant-card .meta strong { color:var(--gray-800); }
+
+  /* PRIORITY */
+  .priority-high { color:var(--wm-red); font-weight:700; }
+  .priority-med { color:var(--wm-orange); font-weight:700; }
+  .priority-low { color:var(--wm-green); font-weight:700; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--wm-blue-dark) 0%, var(--wm-blue) 100%); color:#fff; padding:48px 40px; border-radius:var(--radius-lg); margin-bottom:40px; position:relative; overflow:hidden; }
+  .hero::after { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background:rgba(255,255,255,0.05); border-radius:50%; }
+  .hero h1 { font-size:28px; font-weight:800; margin-bottom:8px; }
+  .hero .subtitle { font-size:16px; opacity:0.9; margin-bottom:24px; }
+  .hero .meta-row { display:flex; gap:24px; flex-wrap:wrap; font-size:13px; opacity:0.85; }
+  .hero .meta-row span { display:flex; align-items:center; gap:6px; }
+
+  /* KEY FINDING */
+  .key-finding { display:flex; gap:16px; padding:16px; background:var(--gray-50); border-radius:var(--radius-sm); margin-bottom:12px; border:1px solid var(--gray-200); }
+  .key-finding .kf-num { width:32px; height:32px; border-radius:50%; background:var(--wm-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; }
+  .key-finding .kf-content h4 { font-size:14px; font-weight:600; margin-bottom:4px; }
+  .key-finding .kf-content p { font-size:13px; color:var(--gray-600); }
+
+  /* OPPORTUNITY CARD */
+  .opp-card { border-radius:var(--radius); padding:24px; border:2px solid; }
+  .opp-card h4 { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .opp-card p { font-size:13px; margin-bottom:8px; }
+  .opp-card .impact { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+
+  /* HEAT MAP */
+  .heat-cell { padding:6px 10px; text-align:center; font-size:12px; font-weight:600; border-radius:4px; }
+  .heat-high { background:#c62828; color:#fff; }
+  .heat-med { background:#ef6c00; color:#fff; }
+  .heat-low { background:#2e7d32; color:#fff; }
+  .heat-none { background:var(--gray-200); color:var(--gray-500); }
+
+  /* ACCORDION */
+  details { margin-bottom:8px; }
+  details summary { cursor:pointer; padding:12px 16px; background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius-sm); font-weight:600; font-size:14px; color:var(--gray-800); list-style:none; display:flex; align-items:center; gap:8px; }
+  details summary::before { content:'▸'; transition:transform 0.2s; }
+  details[open] summary::before { transform:rotate(90deg); }
+  details .detail-body { padding:16px; background:#fff; border:1px solid var(--gray-200); border-top:0; border-radius:0 0 var(--radius-sm) var(--radius-sm); }
+
+  ul.clean { list-style:none; padding:0; }
+  ul.clean li { padding:4px 0 4px 16px; position:relative; font-size:13px; }
+  ul.clean li::before { content:'•'; position:absolute; left:0; color:var(--wm-blue); font-weight:bold; }
+  .text-sm { font-size:13px; }
+  .text-xs { font-size:12px; }
+  .text-muted { color:var(--gray-600); }
+  .mt-16 { margin-top:16px; }
+  .mb-8 { margin-bottom:8px; }
+  .mb-16 { margin-bottom:16px; }
+  .fw-600 { font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- SIDE NAV -->
+<nav class="sidenav">
+  <div class="logo">
+    <h2>DC Leadership<br>North Star</h2>
+    <p>Mobile Experience Research</p>
+  </div>
+  <a href="#study-overview"><span class="nav-num">1</span>Study Overview</a>
+  <a href="#research-goals"><span class="nav-num">2</span>Research Goals & Method</a>
+  <a href="#participants"><span class="nav-num">3</span>Participant Snapshot</a>
+  <a href="#executive-summary"><span class="nav-num">4</span>Executive Summary</a>
+  <a href="#journey-map"><span class="nav-num">5</span>Journey Map</a>
+  <a href="#desk-magnets"><span class="nav-num">6</span>Desk Magnets</a>
+  <a href="#alert-insight-action"><span class="nav-num">7</span>Alert → Insight → Action</a>
+  <a href="#now-vs-later"><span class="nav-num">8</span>In-the-Moment vs. Can-Wait</a>
+  <a href="#environment"><span class="nav-num">9</span>Environment & Hardware</a>
+  <a href="#security"><span class="nav-num">10</span>Security & Connectivity</a>
+  <a href="#opportunities"><span class="nav-num">11</span>Key Opportunities</a>
+  <a href="#appendix"><span class="nav-num">12</span>Appendix</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>DC Leadership North Star</h1>
+  <p class="subtitle">Mobile Experience Research — Cross-Participant Synthesis Dashboard</p>
+  <div class="meta-row">
+    <span>📋 Researcher: Ryan Pace</span>
+    <span>📅 Execution: April 6–24, 2026</span>
+    <span>👥 8 Participants across 4 facilities</span>
+    <span>🏭 Grocery DC — Receiving Area Managers</span>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: STUDY OVERVIEW -->
+<!-- ============================================ -->
+<section id="study-overview">
+  <div class="section-header">
+    <span class="section-num">1</span>
+    <h2>Study Overview</h2>
+  </div>
+
+  <div class="card">
+    <p class="text-sm" style="margin-bottom:16px;">This research was initiated to understand the day-to-day realities of <strong>Receiving Area Managers</strong> in Distribution Center environments, with a primary focus on <strong>Grocery DCs</strong>. The study uncovers where current tools, workflows, and environmental constraints create friction for leaders who need to monitor operations, respond to issues quickly, and make decisions while staying close to the floor.</p>
+
+    <div class="callout callout-blue">
+      <h4>Core Problem Statement</h4>
+      <p>Area managers constantly move between the floor and a desktop computer to access information, investigate issues, and take action. That back-and-forth creates <strong>"operational drag"</strong> and slows response times in moments that require immediate attention.</p>
+    </div>
+
+    <div class="grid-4" style="margin-top:20px;">
+      <div class="stat-card">
+        <div class="stat-val">8</div>
+        <div class="stat-label">Participants</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4</div>
+        <div class="stat-label">Facilities</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">~8hrs</div>
+        <div class="stat-label">Interview Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">6</div>
+        <div class="stat-label">Temp Zones Covered</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Expected Outputs</h3></div>
+    <div class="grid-3">
+      <div class="callout callout-blue" style="margin-bottom:0;">
+        <h4>Desk Magnet Catalog</h4>
+        <p>Every reason an AM returns to a desk</p>
+      </div>
+      <div class="callout callout-green" style="margin-bottom:0;">
+        <h4>Alert → Insight → Action Map</h4>
+        <p>How issues surface, get investigated, and get resolved</p>
+      </div>
+      <div class="callout callout-orange" style="margin-bottom:0;">
+        <h4>Immediate vs. Delayed Needs</h4>
+        <p>What info is needed now vs. can wait</p>
+      </div>
+      <div class="callout callout-purple" style="margin-bottom:0;">
+        <h4>Hardware by Temp Zone</h4>
+        <p>Device feasibility per environment</p>
+      </div>
+      <div class="callout callout-red" style="margin-bottom:0;">
+        <h4>Security/Connectivity Friction</h4>
+        <p>Auth, BYOD, Wi-Fi barriers</p>
+      </div>
+      <div class="callout callout-blue" style="margin-bottom:0;">
+        <h4>Strategic Recommendations</h4>
+        <p>Roadmap prioritization for mobile</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 2: RESEARCH GOALS & METHODOLOGY -->
+<!-- ============================================ -->
+<section id="research-goals">
+  <div class="section-header">
+    <span class="section-num">2</span>
+    <h2>Research Goals & Methodology</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Four Research Goals</h3></div>
+    <div class="grid-2">
+      <div class="callout callout-blue">
+        <h4>1. Identify "Desk Magnets"</h4>
+        <p>Document every specific reason an area manager currently leaves the floor to return to a computer.</p>
+      </div>
+      <div class="callout callout-green">
+        <h4>2. Define the "Mobile Moment"</h4>
+        <p>Map the critical path of <strong>Alert → Insight → Action</strong>. Determine what information is needed immediately vs. what can wait.</p>
+      </div>
+      <div class="callout callout-purple">
+        <h4>3. Understand Hardware & Ergonomics</h4>
+        <p>Evaluate the physical reality of the DC — noise, lighting, PPE, gloved use — to inform device selection (handheld, tablet, wearable).</p>
+      </div>
+      <div class="callout callout-orange">
+        <h4>4. Surface Security & Connectivity Friction</h4>
+        <p>Understand how authentication, BYOD limitations, device access, and connectivity affect adoption speed and practical use of mobile tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Eight Research Questions</h3></div>
+    <table>
+      <thead><tr><th>#</th><th>Research Question</th><th>Maps To Goal</th></tr></thead>
+      <tbody>
+        <tr><td>RQ1</td><td>What are the most common situations requiring AMs to leave the floor and return to a desktop?</td><td><span class="tag tag-blue">Desk Magnets</span></td></tr>
+        <tr><td>RQ2</td><td>What tasks or decisions feel time-sensitive enough that AMs need information in the moment?</td><td><span class="tag tag-green">Mobile Moment</span></td></tr>
+        <tr><td>RQ3</td><td>What is the current flow from alert to insight to action, and where are the biggest delays?</td><td><span class="tag tag-green">Mobile Moment</span></td></tr>
+        <tr><td>RQ4</td><td>What information is most valuable in the moment on the floor vs. can wait until later?</td><td><span class="tag tag-green">Mobile Moment</span></td></tr>
+        <tr><td>RQ5</td><td>How do environmental conditions impact device usability and feasibility?</td><td><span class="tag tag-purple">Hardware</span></td></tr>
+        <tr><td>RQ6</td><td>What are the biggest barriers to mobile adoption (security, auth, device policies, connectivity)?</td><td><span class="tag tag-orange">Security</span></td></tr>
+        <tr><td>RQ7</td><td>How do these challenges vary across Grocery, Ambient, and Fulfillment facilities?</td><td><span class="tag tag-teal">Variation</span></td></tr>
+        <tr><td>RQ8</td><td>What opportunities exist to reduce friction and help managers stay closer to the operation?</td><td><span class="tag tag-blue">Opportunities</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Methodology</h3></div>
+    <div class="grid-2">
+      <div>
+        <h4 style="font-size:14px; margin-bottom:8px;">Remote Contextual Interviews (60 min each)</h4>
+        <p class="text-sm text-muted">Gather broad insight into workflows, pain points, and unmet needs across sites. Six structured sections: Introduction → Role Context → Desk Magnets → Alert/Insight/Action → Mobile Needs/Environment → Wrap-Up.</p>
+      </div>
+      <div>
+        <h4 style="font-size:14px; margin-bottom:8px;">On-Site Ethnographic Shadowing (60 min)</h4>
+        <p class="text-sm text-muted">Observe managers in real working environment — how they move through the space, what triggers desk returns, how they respond to issues, and what environmental factors influence usability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 3: PARTICIPANT SNAPSHOT -->
+<!-- ============================================ -->
+<section id="participants">
+  <div class="section-header">
+    <span class="section-num">3</span>
+    <h2>Participant Snapshot</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="participant-card">
+      <h4>Brittany Hagans</h4>
+      <div class="role">Meat & Produce Receiving AM</div>
+      <div class="meta">
+        <strong>Experience:</strong> ~9 years at Walmart<br>
+        <strong>Temp Zones:</strong> 54°F / 34°F / 28°F<br>
+        <strong>Desk Runner:</strong> Yes<br>
+        <strong>Device Pref:</strong> Tablet w/ lanyard or mobile cart<br>
+        <strong>BYOD:</strong> Yes (personal phone)<br>
+        <strong>Top Desk Magnet:</strong> Updating trailers into doors (YMS)
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Robert Martin III</h4>
+      <div class="role">Perishable Receiving AM — FDD</div>
+      <div class="meta">
+        <strong>Experience:</strong> 24 years at Walmart<br>
+        <strong>Temp Zone:</strong> 32°F (Dairy-Deli)<br>
+        <strong>Desk Runner:</strong> No<br>
+        <strong>Device Pref:</strong> Phone (pocket-sized for coat)<br>
+        <strong>BYOD:</strong> No — tried it, broke his phone<br>
+        <strong>Top Desk Magnet:</strong> Reefer checks via email
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Josh Bales</h4>
+      <div class="role">FDD Receiving AM — DC 7012</div>
+      <div class="meta">
+        <strong>Experience:</strong> 12 years (6 mo. in receiving)<br>
+        <strong>Temp Zone:</strong> 32–34°F dock / -10°F freezer<br>
+        <strong>Desk Runner:</strong> Yes (+ 1 backup)<br>
+        <strong>Device Pref:</strong> Company-issued Pixel phone<br>
+        <strong>BYOD:</strong> Company-issued device<br>
+        <strong>Top Desk Magnet:</strong> CRO packet readiness notification
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Shawn Patzner</h4>
+      <div class="role">FDD Receiving AM — 2nd Shift, Minnesota</div>
+      <div class="meta">
+        <strong>Experience:</strong> 3 yrs Walmart / 18 yrs DC total<br>
+        <strong>Temp Zones:</strong> 34°F dock / 0°F freezer / -10°F ice cream<br>
+        <strong>Desk Runner:</strong> Yes (Spencer — 11-yr veteran)<br>
+        <strong>Device Pref:</strong> TC21 (Zebra handheld)<br>
+        <strong>BYOD:</strong> Separate work phone<br>
+        <strong>Top Desk Magnet:</strong> YMS (Inbound Viewer, TUP/TOP)
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Adriana Flores</h4>
+      <div class="role">Meat & Produce Receiving AM — RDC</div>
+      <div class="meta">
+        <strong>Experience:</strong> Multi-year veteran<br>
+        <strong>Temp Zone:</strong> Perishable (varies by product)<br>
+        <strong>Desk Runner:</strong> No (crew too small)<br>
+        <strong>Device Pref:</strong> Handheld (mobile-optimized UI)<br>
+        <strong>BYOD:</strong> Yes + TC21 for reefer checks<br>
+        <strong>Top Desk Magnet:</strong> Turning off LOS (45-50x/day)
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Marvin Larrabee</h4>
+      <div class="role">Perishable Ops Manager — Full Mech DC-7014</div>
+      <div class="meta">
+        <strong>Experience:</strong> Many years (FDD + Meat/Produce)<br>
+        <strong>Temp Zones:</strong> 50°F – 32°F<br>
+        <strong>Desk Runner:</strong> No<br>
+        <strong>Device Pref:</strong> Personal phone (Samsung)<br>
+        <strong>BYOD:</strong> Yes<br>
+        <strong>Top Desk Magnet:</strong> Checking YMS for trailer arrivals
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Dylan Oakes</h4>
+      <div class="role">FDD Receiving AM — Mechanized DC</div>
+      <div class="meta">
+        <strong>Experience:</strong> 12 yrs (11 shipping, 1 receiving)<br>
+        <strong>Temp Zone:</strong> 30°F dock / 0 to -20°F freezer<br>
+        <strong>Desk Runner:</strong> No dedicated runner<br>
+        <strong>Device Pref:</strong> Oversized phone (iPhone Max+)<br>
+        <strong>BYOD:</strong> Personal phone<br>
+        <strong>Top Desk Magnet:</strong> Calling in drops from YMS
+      </div>
+    </div>
+    <div class="participant-card">
+      <h4>Eric Chan</h4>
+      <div class="role">FDD Receiving AM — Mechanized DC</div>
+      <div class="meta">
+        <strong>Experience:</strong> 9 yrs (~7 in receiving)<br>
+        <strong>Temp Zone:</strong> 30°F dock / 0 to -20°F freezer<br>
+        <strong>Desk Runner:</strong> No dedicated runner<br>
+        <strong>Device Pref:</strong> Tablet (mountable on equipment)<br>
+        <strong>BYOD:</strong> Personal phone<br>
+        <strong>Top Desk Magnet:</strong> Manipulate YMS + reprint labels
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 4: EXECUTIVE SUMMARY -->
+<!-- ============================================ -->
+<section id="executive-summary">
+  <div class="section-header">
+    <span class="section-num">4</span>
+    <h2>Executive Summary</h2>
+  </div>
+
+  <div class="card">
+    <p class="text-sm mb-16">Across all 8 participants, a consistent narrative emerges: <strong>Receiving Area Managers are operationally tethered to desktop computers by a handful of high-frequency, time-sensitive tasks</strong> — primarily centered on YMS (Yard Management System). This tether creates a forced choice between staying on the floor (where they can coach, triage, and respond) and returning to the desk (where the information lives). The result is cumulative operational drag that compounds throughout every shift.</p>
+
+    <div class="key-finding">
+      <div class="kf-num">1</div>
+      <div class="kf-content">
+        <h4>YMS Is the Universal Desk Magnet</h4>
+        <p>Every single participant identified YMS as the primary system pulling them back to the desk. YMS is desktop-only and handles the most time-sensitive operations: trailer-to-door assignments, LOS monitoring, inbound viewer, and TUP/TOP prioritization. <strong>8 of 8 participants</strong> cited YMS as their #1 or #2 pain point.</p>
+      </div>
+    </div>
+    <div class="key-finding">
+      <div class="kf-num">2</div>
+      <div class="kf-content">
+        <h4>The 2-Hour LOS Clock Drives Urgency</h4>
+        <p>The Level of Service target (unload within 2 hours of arrival) creates a hard financial deadline — missed LOS means detention fees. Managers cannot stop or pause this clock. Every minute walking to a desk is a minute off the LOS timer. Adriana walks "half a mile" to shut off LOS and sometimes misses because she "didn't walk fast enough."</p>
+      </div>
+    </div>
+    <div class="key-finding">
+      <div class="kf-num">3</div>
+      <div class="kf-content">
+        <h4>Managers Carry 3–5 Devices Already</h4>
+        <p>Participants currently juggle work phones, personal phones, Cisco phones, TC21/TC70 handhelds, walkie-talkies, and sometimes laptops. Adding another device is not the answer — <strong>consolidation onto fewer, more capable devices</strong> is the path forward.</p>
+      </div>
+    </div>
+    <div class="key-finding">
+      <div class="kf-num">4</div>
+      <div class="kf-content">
+        <h4>No Consensus on Form Factor — But Clear Patterns</h4>
+        <p>Phone advocates (Robert, Marvin, Dylan) value portability and pockets in cold environments. Tablet advocates (Brittany, Eric) value screen size for multi-tab workflows. TC21 advocates (Shawn) value the all-in-one scanner + Atlas capability. <strong>The ideal solution may be a responsive mobile-first YMS that works across form factors.</strong></p>
+      </div>
+    </div>
+    <div class="key-finding">
+      <div class="kf-num">5</div>
+      <div class="kf-content">
+        <h4>Wi-Fi and Security Are Largely Solved</h4>
+        <p>Unlike earlier assumptions, connectivity and security are <strong>not major blockers</strong>. Every participant reported recent Wi-Fi improvements. Login friction is minimal. The barriers are functional (YMS is desktop-only) and design-related (mobile UI doesn't exist), not infrastructural.</p>
+      </div>
+    </div>
+    <div class="key-finding">
+      <div class="kf-num">6</div>
+      <div class="kf-content">
+        <h4>The Biggest Risk to Adoption: Bad Mobile UX</h4>
+        <p>Participants were explicit — if mobile YMS is just "the desktop version shrunk down" (Adriana), it will fail. Too many clicks will kill adoption: "Any extra click is gonna cause somebody to go, 'oh, that doesn't work for me'" (Marvin). Face ID, minimal taps, and mobile-native design are prerequisites.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 5: JOURNEY MAP -->
+<!-- ============================================ -->
+<section id="journey-map">
+  <div class="section-header">
+    <span class="section-num">5</span>
+    <h2>Receiving AM Journey Map</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Composite Shift Timeline — Perishable Receiving AM</h3></div>
+    <p class="text-sm text-muted mb-16">Synthesized from all 8 interviews + FDDR Standard Work For Leaders schedule. Desk trips highlighted.</p>
+
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-blue-dark);">Pre-Shift<br>~2:00 AM</div>
+      <div class="journey-content">
+        <h4>Shift Setup & Planning</h4>
+        <p>Identify workload, check IVR for call-outs, review YMS for scheduled appointments, check trailer availability. Prepare door sheets (Excel). Sign out packets from CRO. Check emails for overnight alerts.</p>
+        <div class="j-systems"><span class="tag tag-blue">YMS</span> <span class="tag tag-blue">GDM</span> <span class="tag tag-orange">Email</span> <span class="tag tag-purple">Excel</span> <span class="tag tag-red">🖥️ DESK REQUIRED</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-blue);">Wave 1<br>~2:15 AM</div>
+      <div class="journey-content">
+        <h4>First Appointment Wave & Startup</h4>
+        <p>Deliver packets to associates on dock. Open banana rooms (Adriana — only she can do this). Brief team on priorities. Assign unloaders to doors, put-away drivers staged. Monitor first trailers being unloaded.</p>
+        <div class="j-systems"><span class="tag tag-blue">YMS</span> <span class="tag tag-teal">Atlas</span> <span class="tag tag-orange">Radio</span> <span class="tag tag-red">🖥️ BANANA ROOMS = DESK</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-teal);">Execution<br>3–6 AM</div>
+      <div class="journey-content">
+        <h4>Core Receiving Operations — Peak Desk Magnet Zone</h4>
+        <p><strong>This is where the desk-vs-floor tension peaks.</strong> Managers constantly shuttle between dock and desk to: turn off LOS (45-50x/day for Adriana), assign new trailers to doors, check for TUP/TOP priority changes, handle rejections, print labels, check for new arrivals. Walking distances range from adjacent to "half a mile" depending on facility layout.</p>
+        <div class="j-systems"><span class="tag tag-blue">YMS</span> <span class="tag tag-teal">Atlas</span> <span class="tag tag-blue">GDM</span> <span class="tag tag-orange">Radio</span> <span class="tag tag-red">🖥️ DESK 10-20x PER HOUR</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-green);">~5:00 AM</div>
+      <div class="journey-content">
+        <h4>Reefer Checks & Safety Walk</h4>
+        <p>30–45 minutes in the yard checking trailer temperatures. TC21 used but with limited YMS visibility. During this time, manager is completely blind to dock status, new arrivals, and LOS timers.</p>
+        <div class="j-systems"><span class="tag tag-teal">TC21</span> <span class="tag tag-orange">Radio</span> <span class="tag tag-red">⚠️ NO YMS ACCESS IN YARD</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-orange);">Waves 2-3<br>4:30-5:30</div>
+      <div class="journey-content">
+        <h4>Additional Appointment Waves</h4>
+        <p>Second and third waves overlap with ongoing operations. If Wave 1 ran late, everything cascades. Must manage flow balance (unloaders vs. put-away drivers), handle unexpected early arrivals, coordinate backhauls. DMS meeting preparation.</p>
+        <div class="j-systems"><span class="tag tag-blue">YMS</span> <span class="tag tag-teal">Atlas</span> <span class="tag tag-blue">GDM</span> <span class="tag tag-purple">Tableau</span> <span class="tag tag-red">🖥️ CASCADING DESK TRIPS</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--wm-purple);">DMS<br>~10 AM</div>
+      <div class="journey-content">
+        <h4>Daily Ops Board / DMS Review</h4>
+        <p>Gather data from multiple Tableau sites, GDM, GTA. Present countermeasures. Update Ops DMS slides. This pulls the manager completely off the floor for 30-60 minutes.</p>
+        <div class="j-systems"><span class="tag tag-purple">Tableau</span> <span class="tag tag-blue">GDM</span> <span class="tag tag-purple">GTA</span> <span class="tag tag-red">🖥️ FULL DESK SESSION</span></div>
+      </div>
+    </div>
+    <div class="journey-phase">
+      <div class="journey-time" style="background:var(--gray-600);">Wind Down<br>Last 1-2 hrs</div>
+      <div class="journey-content">
+        <h4>End-of-Shift Reporting & Handoff</h4>
+        <p>Enter PTS (production time standards), TPR moves & volume, run performance calculations. End-of-shift dock audit. Reconcile case counts with CRO. Enter downtime. Send weekly passdown. Hand off door status to next shift.</p>
+        <div class="j-systems"><span class="tag tag-blue">YMS</span> <span class="tag tag-teal">Atlas</span> <span class="tag tag-blue">GDM</span> <span class="tag tag-purple">Excel</span> <span class="tag tag-red">🖥️ DESK REQUIRED</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 6: DESK MAGNETS CATALOG -->
+<!-- ============================================ -->
+<section id="desk-magnets">
+  <div class="section-header">
+    <span class="section-num">6</span>
+    <h2>Desk Magnets — Complete Catalog</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Frequency of Desk Magnets Across Participants</h3></div>
+    <p class="text-sm text-muted mb-16">Tasks that pull managers from the floor back to a desktop computer. Ranked by how many participants cited each magnet.</p>
+
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">YMS: Trailer-to-door assignment</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--wm-blue);">8/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">YMS: Inbound viewer / arrivals</div>
+        <div class="bar-track"><div class="bar-fill" style="width:87.5%;background:var(--wm-blue);">7/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">YMS: TUP/TOP monitoring</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--wm-blue);">6/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">LOS turn-off / monitoring</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--wm-red);">6/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Label reprinting</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--wm-orange);">4/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Email: Reefer/temp exceptions</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--wm-orange);">4/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">End-of-day reporting (PTS, TPR)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--gray-500);">8/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">GDM / OSDR monitoring</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--wm-teal);">4/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Manual door map updates (Excel)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.5%;background:var(--wm-purple);">3/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">CRO packet pickup</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.5%;background:var(--wm-purple);">3/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Trailer edit / correction</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.5%;background:var(--wm-purple);">3/8</div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Downtime entry</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.5%;background:var(--wm-purple);">3/8</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Desk Magnet Detail Table</h3></div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>Desk Magnet</th><th>System</th><th>Frequency</th><th>Urgency</th><th>Mobile Feasibility</th><th>Cited By</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Assign trailers to doors</strong></td>
+          <td><span class="tag tag-blue">YMS</span></td>
+          <td>10-20x/shift</td>
+          <td><span class="priority-high">CRITICAL</span></td>
+          <td><span class="tag tag-green">HIGH</span> — Tap-to-assign UI</td>
+          <td>All 8</td>
+        </tr>
+        <tr>
+          <td><strong>Turn off LOS for completed appointments</strong></td>
+          <td><span class="tag tag-blue">YMS</span></td>
+          <td>45-50x/day (Adriana)</td>
+          <td><span class="priority-high">CRITICAL</span></td>
+          <td><span class="tag tag-green">HIGH</span> — 1-tap action</td>
+          <td>Adriana, Brittany, Robert, Shawn, Marvin, Dylan</td>
+        </tr>
+        <tr>
+          <td><strong>Monitor inbound viewer / arrivals</strong></td>
+          <td><span class="tag tag-blue">YMS</span></td>
+          <td>Continuous</td>
+          <td><span class="priority-high">HIGH</span></td>
+          <td><span class="tag tag-green">HIGH</span> — Push notifications</td>
+          <td>All except Josh</td>
+        </tr>
+        <tr>
+          <td><strong>TUP/TOP priority monitoring</strong></td>
+          <td><span class="tag tag-blue">YMS</span></td>
+          <td>Constant (dynamic)</td>
+          <td><span class="priority-high">HIGH</span></td>
+          <td><span class="tag tag-green">HIGH</span> — Real-time feed</td>
+          <td>Shawn, Brittany, Robert, Dylan, Eric, Josh</td>
+        </tr>
+        <tr>
+          <td><strong>Reprint labels</strong></td>
+          <td><span class="tag tag-teal">Atlas</span></td>
+          <td>Several per shift</td>
+          <td><span class="priority-med">MEDIUM</span></td>
+          <td><span class="tag tag-yellow">MEDIUM</span> — Needs print infra</td>
+          <td>Josh, Dylan, Eric, Marvin</td>
+        </tr>
+        <tr>
+          <td><strong>Reefer check alerts (email-based)</strong></td>
+          <td><span class="tag tag-orange">Email</span></td>
+          <td>Daily + ad hoc</td>
+          <td><span class="priority-high">CRITICAL</span></td>
+          <td><span class="tag tag-green">HIGH</span> — In-app alert</td>
+          <td>Robert, Shawn, Adriana, Josh</td>
+        </tr>
+        <tr>
+          <td><strong>Manual door map Excel update</strong></td>
+          <td><span class="tag tag-purple">Excel</span></td>
+          <td>Continuous (Shawn)</td>
+          <td><span class="priority-med">MEDIUM</span></td>
+          <td><span class="tag tag-green">HIGH</span> — Auto-generate from YMS</td>
+          <td>Shawn, Brittany, Marvin</td>
+        </tr>
+        <tr>
+          <td><strong>Trailer edit / correction</strong></td>
+          <td><span class="tag tag-blue">YMS</span></td>
+          <td>Ad hoc</td>
+          <td><span class="priority-high">HIGH</span></td>
+          <td><span class="tag tag-green">HIGH</span> — Mobile form</td>
+          <td>Marvin, Josh, Dylan</td>
+        </tr>
+        <tr>
+          <td><strong>End-of-day reporting</strong></td>
+          <td><span class="tag tag-teal">Multiple</span></td>
+          <td>1x/shift</td>
+          <td><span class="priority-low">LOW</span></td>
+          <td><span class="tag tag-yellow">MEDIUM</span> — Complex data entry</td>
+          <td>All 8</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Voices From the Floor</h3></div>
+    <div class="grid-2">
+      <div class="quote">
+        YMS I cannot. YMS I have to be at a computer desktop... If I get a phone call, I have to walk all the way back to my desk.
+        <span class="quote-attr">— Shawn Patzner</span>
+      </div>
+      <div class="quote">
+        It's done. I'm standing at the door that it physically got unloaded at. It's done and received, but I have to walk half a mile to my desk to get it shut off.
+        <span class="quote-attr">— Adriana Flores</span>
+      </div>
+      <div class="quote">
+        The only way I would know if I had packets sitting in the basket for my live loads is if I'm sitting up there or if CRO radios me.
+        <span class="quote-attr">— Josh Bales</span>
+      </div>
+      <div class="quote">
+        Trying to get any of these things into one seamless flow would be amazing.
+        <span class="quote-attr">— Marvin Larrabee</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 7: ALERT → INSIGHT → ACTION -->
+<!-- ============================================ -->
+<section id="alert-insight-action">
+  <div class="section-header">
+    <span class="section-num">7</span>
+    <h2>Alert → Insight → Action Framework</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>The Three-Stage Operational Response Model</h3></div>
+    <div class="flow">
+      <div class="flow-step" style="background:var(--wm-red-light); border:2px solid var(--wm-red);">
+        <h4 style="color:var(--wm-red);">🔔 ALERT</h4>
+        <p>Something changes in the operation and comes to the manager's attention</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:var(--wm-blue-light); border:2px solid var(--wm-blue);">
+        <h4 style="color:var(--wm-blue);">🔍 INSIGHT</h4>
+        <p>Manager gathers information needed to understand the situation</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:var(--wm-green-light); border:2px solid var(--wm-green);">
+        <h4 style="color:var(--wm-green);">⚡ ACTION</h4>
+        <p>Manager decides and executes a response</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Where Breakdowns Occur — By Stage</h3></div>
+
+    <h4 style="color:var(--wm-red); margin-bottom:8px;">Alert Stage — How Issues Surface Today</h4>
+    <table style="margin-bottom:20px;">
+      <thead><tr><th>Alert Channel</th><th>Examples</th><th>Reliability</th><th>Friction</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Radio/Walkie</strong></td><td>Gate calls about arrivals, associate reports issues</td><td><span class="tag tag-orange">Variable</span></td><td>Inaudible in freezer zones (fans, equipment noise)</td></tr>
+        <tr><td><strong>Physical walk to desk</strong></td><td>Routine 30-min desk check (Robert), packet check (Josh)</td><td><span class="tag tag-red">Low</span></td><td>No trigger — time-based, not event-based</td></tr>
+        <tr><td><strong>Email</strong></td><td>Reefer alerts, InfoLink lockouts, QC exceptions</td><td><span class="tag tag-orange">Variable</span></td><td>Desktop-only; no push notification on floor</td></tr>
+        <tr><td><strong>Direct observation</strong></td><td>Seeing backed-up dock, tipped pallet, idle associates</td><td><span class="tag tag-green">High</span></td><td>Only works when manager is physically on the floor</td></tr>
+        <tr><td><strong>Phone call (gate)</strong></td><td>Late trailer arrival, unexpected early trailer</td><td><span class="tag tag-green">High</span></td><td>Triggers a desk trip to update YMS</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="color:var(--wm-blue); margin-bottom:8px;">Insight Stage — The Investigation Bottleneck</h4>
+    <div class="callout callout-blue">
+      <h4>The "3-Tab Problem" (Marvin's YMS Frustration)</h4>
+      <p>To investigate a single trailer issue, managers must navigate to 3 separate sections of YMS: (1) dock view / move queue, (2) inbound viewer, (3) appointments. Then cross-reference with GDM for PO and freight type. Josh must go YMS → GDM → TCR → delivery number → PO → freight description. <strong>This multi-system investigation is the primary time sink in the insight stage.</strong></p>
+    </div>
+
+    <h4 style="color:var(--wm-green); margin-bottom:8px;">Action Stage — Where Execution Requires the Desk</h4>
+    <ul class="clean">
+      <li><strong>Can't assign trailers from floor</strong> — Must return to desktop YMS to assign a trailer to an open door</li>
+      <li><strong>Can't shut off LOS from floor</strong> — Even standing at the completed door, must walk to desk</li>
+      <li><strong>Can't reprint labels from handheld</strong> — TC70 can split pallets but can't print the new label</li>
+      <li><strong>Can't do trailer edits from floor</strong> — Wrong-door corrections require 3 separate YMS actions at desk</li>
+      <li><strong>Can't see TUP changes in real-time</strong> — Priority shifts based on store sales data; manager learns only at desk</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Scenario: Late Trailer Arrival (Cross-Participant Composite)</h3></div>
+    <table>
+      <thead><tr><th>Stage</th><th>What Happens</th><th>Where</th><th>Time Cost</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-red">ALERT</span></td><td>Gate radios that a late trailer has arrived</td><td>Floor (radio)</td><td>Immediate</td></tr>
+        <tr><td><span class="tag tag-blue">INSIGHT</span></td><td>Manager walks to desk, opens YMS inbound viewer, identifies open door, checks if it's a TUP, cross-references GDM for freight type</td><td>Desk</td><td>3-10 min walk + 2-5 min lookup</td></tr>
+        <tr><td><span class="tag tag-green">ACTION</span></td><td>Assigns trailer to door in YMS, radios unloader to prep, walks back to dock to deliver packet</td><td>Desk → Floor</td><td>2 min assignment + 3-10 min walk back</td></tr>
+        <tr><td colspan="2"><strong>Total delay: 10-25 minutes per late trailer</strong></td><td colspan="2"><strong>All while LOS clock is ticking</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-muted" style="margin-top:12px;">With mobile YMS, this becomes: Gate alerts → Manager sees on phone → Assigns door with 2 taps → Radios unloader → <strong>0 desk trips, ~2 minutes total</strong>.</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 8: IN-THE-MOMENT VS. CAN-WAIT -->
+<!-- ============================================ -->
+<section id="now-vs-later">
+  <div class="section-header">
+    <span class="section-num">8</span>
+    <h2>In-the-Moment vs. Can-Wait</h2>
+  </div>
+
+  <div class="card">
+    <div class="grid-2">
+      <div>
+        <h3 style="color:var(--wm-red); margin-bottom:12px;">⚡ Need It NOW (On the Floor)</h3>
+        <table>
+          <thead><tr><th>Information Need</th><th>Why Urgent</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Which trailers have arrived / been gated in</strong></td><td>Must assign to doors immediately; LOS clock starts at arrival</td></tr>
+            <tr><td><strong>Which doors are open/available</strong></td><td>Can't assign a trailer without knowing door status</td></tr>
+            <tr><td><strong>TUP/TOP priority status</strong></td><td>Changes dynamically based on store sales; dictates unload order</td></tr>
+            <tr><td><strong>LOS timer status</strong></td><td>Detention fees if exceeded; financial impact</td></tr>
+            <tr><td><strong>Reefer temperature exceptions</strong></td><td>Cold chain compliance; food safety; potential $thousands in lost product</td></tr>
+            <tr><td><strong>CRO packet readiness</strong></td><td>Associates idle until packet arrives; LOS clock ticking</td></tr>
+            <tr><td><strong>Trailer freight type (freezer vs. dairy deli)</strong></td><td>Wrong assignment = wrong temp zone = potential product loss</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 style="color:var(--wm-green); margin-bottom:12px;">📋 Can Wait (Desk Session)</h3>
+        <table>
+          <thead><tr><th>Information Need</th><th>Why Deferrable</th></tr></thead>
+          <tbody>
+            <tr><td><strong>End-of-day PTS / TPR reporting</strong></td><td>Batch process; complex data entry; end of shift</td></tr>
+            <tr><td><strong>DMS meeting preparation</strong></td><td>Pulls from Tableau, GDM, GTA; multi-system aggregation</td></tr>
+            <tr><td><strong>Performance calculations</strong></td><td>Retrospective analysis; not real-time decision</td></tr>
+            <tr><td><strong>Semi-annual management contacts</strong></td><td>Scheduled task; no time urgency</td></tr>
+            <tr><td><strong>Safety scorecards / audits</strong></td><td>Periodic compliance task</td></tr>
+            <tr><td><strong>Commendations / BBC entries</strong></td><td>Administrative; no operational urgency</td></tr>
+            <tr><td><strong>CBL plans (self + associates)</strong></td><td>Developmental planning; flexible timing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>The Gray Zone — Contextually Urgent</h3></div>
+    <p class="text-sm text-muted mb-16">These tasks shift between "now" and "later" based on operational conditions.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Urgent When...</th><th>Can Wait When...</th></tr></thead>
+      <tbody>
+        <tr><td><strong>OSDR report monitoring</strong></td><td>Short/over discovered during active receiving</td><td>Routine end-of-shift reconciliation</td></tr>
+        <tr><td><strong>Downtime entry</strong></td><td>Need real-time productivity picture during shift</td><td>Batch entry at end of shift is acceptable</td></tr>
+        <tr><td><strong>Rejection processing</strong></td><td>Live load driver waiting (detention fees accumulating)</td><td>Drop trailer can sit until resources free up</td></tr>
+        <tr><td><strong>Email checking</strong></td><td>Reefer alert, InfoLink lockout, safety issue</td><td>General administrative correspondence</td></tr>
+        <tr><td><strong>BOL changes</strong></td><td>Discrepancy discovered during active unload</td><td>Correction can be processed during desk session</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 9: ENVIRONMENT & HARDWARE -->
+<!-- ============================================ -->
+<section id="environment">
+  <div class="section-header">
+    <span class="section-num">9</span>
+    <h2>Environment, Hardware & Ergonomics</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Temperature Zone Constraints Matrix</h3></div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>Zone</th><th>Temp Range</th><th>Gloves?</th><th>Touchscreen Impact</th><th>Device Concerns</th><th>Participants</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Meat & Produce</strong></td>
+          <td>54°F / 34°F / 28°F</td>
+          <td>Optional</td>
+          <td><span class="heat-low">Low friction</span></td>
+          <td>Multiple temp sub-zones; swing doors can't stay open</td>
+          <td>Brittany, Adriana</td>
+        </tr>
+        <tr>
+          <td><strong>Dairy-Deli Dock</strong></td>
+          <td>30–34°F</td>
+          <td>Most wear them</td>
+          <td><span class="heat-med">Medium friction</span></td>
+          <td>Cut fingertips off gloves for touchscreen; Shawn wears no gloves</td>
+          <td>Robert, Shawn, Josh, Dylan, Eric</td>
+        </tr>
+        <tr>
+          <td><strong>Freezer</strong></td>
+          <td>0°F to -10°F</td>
+          <td>Required</td>
+          <td><span class="heat-high">High friction</span></td>
+          <td>Laptops can only survive limited time; TC70s lag near freezer; battery drain</td>
+          <td>Shawn, Josh, Dylan, Eric</td>
+        </tr>
+        <tr>
+          <td><strong>Ice Cream</strong></td>
+          <td>-10°F to -20°F</td>
+          <td>Required (heavy)</td>
+          <td><span class="heat-high">Very high friction</span></td>
+          <td>Most temperature-sensitive freight; single truck = high 6 figures; extreme cold affects all devices</td>
+          <td>Shawn, Eric</td>
+        </tr>
+        <tr>
+          <td><strong>Yard</strong></td>
+          <td>Ambient (varies)</td>
+          <td>No</td>
+          <td><span class="heat-low">Low friction</span></td>
+          <td>Cell service spotty in some areas; Wi-Fi coverage varies; far from desk</td>
+          <td>All (reefer checks)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Device Preference Distribution</h3></div>
+    <div class="grid-3">
+      <div style="text-align:center; padding:20px;">
+        <div style="font-size:48px;">📱</div>
+        <h4>Phone</h4>
+        <p class="text-sm" style="color:var(--wm-blue); font-weight:600;">3 participants</p>
+        <p class="text-sm text-muted" style="margin-top:8px;">Robert, Marvin, Dylan</p>
+        <p class="text-xs text-muted" style="margin-top:4px;">Fits in coat pocket in cold environments. Always on person. Portable.</p>
+      </div>
+      <div style="text-align:center; padding:20px;">
+        <div style="font-size:48px;">📋</div>
+        <h4>Tablet</h4>
+        <p class="text-sm" style="color:var(--wm-blue); font-weight:600;">2 participants</p>
+        <p class="text-sm text-muted" style="margin-top:8px;">Brittany, Eric</p>
+        <p class="text-xs text-muted" style="margin-top:4px;">Better screen real estate for multi-tab workflows. Mountable on equipment.</p>
+      </div>
+      <div style="text-align:center; padding:20px;">
+        <div style="font-size:48px;">📟</div>
+        <h4>Handheld (TC21)</h4>
+        <p class="text-sm" style="color:var(--wm-blue); font-weight:600;">2 participants</p>
+        <p class="text-sm text-muted" style="margin-top:8px;">Shawn, Adriana</p>
+        <p class="text-xs text-muted" style="margin-top:4px;">All-in-one (scanner + Atlas). Already in ecosystem. Rugged.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-orange" style="margin-top:16px;">
+      <h4>Key Tension: Screen Size vs. Portability</h4>
+      <p>Phone advocates prioritize <strong>always having the device on them</strong> (especially in cold environments where coat pockets are essential). Tablet advocates prioritize <strong>screen real estate</strong> for multi-tab YMS workflows. Eric specifically warned: "I will lose a phone. I will leave it somewhere." Brittany warned: "If it's too small, I'm honestly probably not going to use it." <strong>The implication: build a responsive mobile-first YMS that works well on any screen size, and let the form factor choice be per-manager.</strong></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Current Device Burden (Per Shift)</h3></div>
+    <table>
+      <thead><tr><th>Device</th><th>Purpose</th><th>Who Carries It</th></tr></thead>
+      <tbody>
+        <tr><td>Work/personal phone</td><td>BYOD apps, email, Teams, calling</td><td>Most participants</td></tr>
+        <tr><td>Cisco phone</td><td>In-house DC extensions (4-digit)</td><td>Shawn, others</td></tr>
+        <tr><td>TC21 / TC70</td><td>Atlas, scanning, limited YMS</td><td>All (associates + some managers)</td></tr>
+        <tr><td>Walkie-talkie/Radio</td><td>Floor communication (multiple channels)</td><td>All participants</td></tr>
+        <tr><td>Laptop</td><td>YMS, GDM, email (docked at desk)</td><td>Most (Marvin notes them as "phenomenal")</td></tr>
+        <tr><td>Google Pixel (company)</td><td>HACCP audits, PPA, gate calls</td><td>Josh (company-issued)</td></tr>
+      </tbody>
+    </table>
+    <p class="text-sm text-muted" style="margin-top:8px;">Shawn carries <strong>5 devices simultaneously</strong>. Consolidation is a clear opportunity.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Environmental Factors Affecting Mobile Usability</h3></div>
+    <div class="grid-2">
+      <div class="callout callout-blue">
+        <h4>🧤 Gloves & Touchscreens</h4>
+        <p>Associates <strong>cut fingertips off gloves</strong> to use TC21 touchscreens (Shawn). Shawn doesn't wear gloves at all for constant touchscreen access. Josh keeps gloves in pocket, doesn't wear them. <strong>Company gloves are not touchscreen-compatible.</strong> Recommendation: provide touchscreen-compatible cold-weather gloves.</p>
+      </div>
+      <div class="callout callout-orange">
+        <h4>🔊 Noise Levels</h4>
+        <p>Freezer fans, equipment, people yelling make <strong>radios nearly impossible to hear</strong> (Josh). Vibration notifications may also be missed in cold environments. Visual alerts (screen-based) are more reliable than audio/haptic.</p>
+      </div>
+      <div class="callout callout-purple">
+        <h4>🧱 Physical Walls & Visibility</h4>
+        <p>Docks are divided by physical walls between temperature zones. Managers <strong>cannot see other areas</strong> without walking there. 7-foot pallets block line of sight even within zones. Mobile dashboards bridge this visibility gap.</p>
+      </div>
+      <div class="callout callout-red">
+        <h4>❄️ Device Cold Tolerance</h4>
+        <p>Laptops can only survive limited time in freezer zones. Battery drain accelerates in cold. TC70s lag near freezer Wi-Fi points. <strong>Any mobile device must be rated for sustained use at 0°F to -20°F.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 10: SECURITY & CONNECTIVITY -->
+<!-- ============================================ -->
+<section id="security">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Security, Access & Connectivity</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Overall Assessment: Not a Major Blocker</h3></div>
+    <p class="text-sm mb-16">Contrary to initial hypotheses, security and connectivity emerged as <strong>largely solved problems</strong> across all participants. The barriers to mobile adoption are functional (YMS doesn't have a mobile interface) and design-related (no mobile-optimized UX), not infrastructural.</p>
+
+    <div class="grid-3">
+      <div class="stat-card" style="border-left:4px solid var(--wm-green);">
+        <div class="stat-val" style="color:var(--wm-green);">7/8</div>
+        <div class="stat-label">Report Good Wi-Fi</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid var(--wm-green);">
+        <div class="stat-val" style="color:var(--wm-green);">6/8</div>
+        <div class="stat-label">No Login Friction</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid var(--wm-green);">
+        <div class="stat-val" style="color:var(--wm-green);">5/8</div>
+        <div class="stat-label">Use BYOD Today</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>BYOD Adoption Landscape</h3></div>
+    <table>
+      <thead><tr><th>Participant</th><th>BYOD Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Brittany Hagans</td><td><span class="tag tag-green">Active</span></td><td>Uses personal phone; co-manager tried work phone but returned it (burden of 2 phones)</td></tr>
+        <tr><td>Robert Martin III</td><td><span class="tag tag-red">Rejected</span></td><td>Tried BYOD — broke his phone, had to factory reset. Uses personal email as photo workaround.</td></tr>
+        <tr><td>Josh Bales</td><td><span class="tag tag-blue">Company Device</span></td><td>Company-issued Google Pixel for all managers at his DC</td></tr>
+        <tr><td>Shawn Patzner</td><td><span class="tag tag-green">Separate Work Phone</span></td><td>Opted for separate work phone. Leaves it home on vacation for work-life balance.</td></tr>
+        <tr><td>Adriana Flores</td><td><span class="tag tag-green">Active</span></td><td>Has BYOD + TC21 for reefer checks</td></tr>
+        <tr><td>Marvin Larrabee</td><td><span class="tag tag-green">Active</span></td><td>Uses BYOD, finds it "incredibly helpful." Notes not everyone opts in.</td></tr>
+        <tr><td>Dylan Oakes</td><td><span class="tag tag-orange">Personal Only</span></td><td>Uses personal phone for any work tasks; no company device</td></tr>
+        <tr><td>Eric Chan</td><td><span class="tag tag-orange">Personal Only</span></td><td>Same as Dylan; no company-issued mobile device</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Remaining Friction Points</h3></div>
+    <div class="grid-2">
+      <div class="callout callout-orange">
+        <h4>VPN Frustration</h4>
+        <p>Dylan and Eric cited VPN as the "fastest thing" (sarcastic). Particularly painful for home access and when opening spreadsheets remotely. Not a floor issue but affects out-of-facility work.</p>
+      </div>
+      <div class="callout callout-orange">
+        <h4>Session Timeouts</h4>
+        <p>GLS timed out after "10 minutes" (Eric). Atlas improved to 12 hours. <strong>Mobile tools must not time out quickly</strong> — re-authentication mid-crisis would kill adoption.</p>
+      </div>
+      <div class="callout callout-blue">
+        <h4>Face ID / Biometric Login</h4>
+        <p>Eric specifically requested Face ID instead of passwords. In cold environments where gloves are worn, biometric auth (Face ID or voice) is more practical than typed passwords.</p>
+      </div>
+      <div class="callout callout-purple">
+        <h4>Atlas Mobile App — Exists But Inaccessible</h4>
+        <p>Marvin reports an Atlas mobile app exists but tells him it's "not available at my facility." iPhone incompatibility also noted. <strong>Existing mobile tools are underutilized due to configuration/access issues.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Access Control Concern (From Dylan & Eric)</h3></div>
+    <div class="callout callout-red">
+      <h4>If YMS goes mobile, restrict associate access</h4>
+      <p>Current YMS gives associates too much access — they could accidentally gate out a trailer or gate in under the wrong status. If a trailer is accidentally deeded out, "that truck doesn't exist anymore" and needs a new delivery and extensive rework. <strong>Mobile YMS needs role-based access with simplified, limited-function views for associates vs. full manager access.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 11: KEY OPPORTUNITIES -->
+<!-- ============================================ -->
+<section id="opportunities">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Key Opportunities & Strategic Recommendations</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="opp-card" style="background:var(--wm-blue-light); border-color:var(--wm-blue);">
+      <span class="tag tag-red" style="margin-bottom:8px;">P0 — HIGHEST IMPACT</span>
+      <h4 style="color:var(--wm-blue-dark);">1. Mobile-First YMS</h4>
+      <p>Build a responsive, mobile-native YMS experience with core capabilities: trailer-to-door assignment, inbound viewer, LOS monitoring, TUP/TOP dashboard, and trailer edits. This single initiative addresses the #1 desk magnet cited by <strong>all 8 participants</strong>.</p>
+      <p class="impact" style="color:var(--wm-blue);">Impact: Eliminates 60-80% of desk trips • Saves 1-3 hours/shift in walking time • Reduces LOS misses</p>
+    </div>
+    <div class="opp-card" style="background:var(--wm-red-light); border-color:var(--wm-red);">
+      <span class="tag tag-red" style="margin-bottom:8px;">P0 — HIGHEST IMPACT</span>
+      <h4 style="color:var(--wm-red);">2. Push Notifications for Operational Events</h4>
+      <p>Replace the "walk to desk and check" pattern with proactive push notifications: trailer arrivals, TUP changes, LOS approaching deadline, CRO packets ready, reefer temperature exceptions. Transforms the alert stage from passive to active.</p>
+      <p class="impact" style="color:var(--wm-red);">Impact: Eliminates routine 30-min desk check cycles • Enables event-driven response • Prevents missed reefer alerts</p>
+    </div>
+    <div class="opp-card" style="background:var(--wm-green-light); border-color:var(--wm-green);">
+      <span class="tag tag-orange" style="margin-bottom:8px;">P1 — HIGH IMPACT</span>
+      <h4 style="color:var(--wm-green);">3. 1-Tap LOS Shutoff from Floor</h4>
+      <p>Adriana turns off LOS 45-50 times per day, each time requiring a walk to her desk. A 1-tap mobile LOS shutoff — triggered when the manager is standing at the completed door — would save her an estimated 2+ hours per shift and eliminate her most common "I didn't walk fast enough" LOS misses.</p>
+      <p class="impact" style="color:var(--wm-green);">Impact: Saves ~90 desk trips/day for one manager • Directly reduces LOS misses • Protects building-wide MIP</p>
+    </div>
+    <div class="opp-card" style="background:var(--wm-orange-light); border-color:var(--wm-orange);">
+      <span class="tag tag-orange" style="margin-bottom:8px;">P1 — HIGH IMPACT</span>
+      <h4 style="color:var(--wm-orange);">4. Unified Trailer Information View</h4>
+      <p>Today, learning what freight is on a trailer requires navigating YMS → GDM → TCR → PO → freight description across 3+ systems. Consolidate trailer info into a single view: trailer number, freight type, temperature, PO, vendor, LOS timer, and door assignment — all in one place.</p>
+      <p class="impact" style="color:var(--wm-orange);">Impact: Eliminates multi-system cross-referencing • Reduces investigation time from 5-10 min to seconds</p>
+    </div>
+    <div class="opp-card" style="background:var(--wm-purple-light); border-color:var(--wm-purple);">
+      <span class="tag tag-blue" style="margin-bottom:8px;">P2 — MEDIUM IMPACT</span>
+      <h4 style="color:var(--wm-purple);">5. Auto-Generated Door Map from YMS</h4>
+      <p>Shawn manually maintains a color-coded Excel door map displayed on a screen above his dock desk, cross-referencing YMS status throughout the day. When he's away (rejections, meetings), the map goes stale and his team loses visibility. Auto-generating this from live YMS data would empower team self-direction.</p>
+      <p class="impact" style="color:var(--wm-purple);">Impact: Eliminates manual Excel maintenance • Team gains real-time visibility without manager • Enables floor-mounted dashboard</p>
+    </div>
+    <div class="opp-card" style="background:var(--wm-teal-light); border-color:var(--wm-teal);">
+      <span class="tag tag-blue" style="margin-bottom:8px;">P2 — MEDIUM IMPACT</span>
+      <h4 style="color:var(--wm-teal);">6. Mobile Label Reprinting</h4>
+      <p>TC70 handhelds can split pallets but cannot reprint the new label (Dylan & Eric). Put-away drivers with ripped labels must drive across the building to find a manager at a desk. Enable label reprinting from handheld devices or nearest wireless printer.</p>
+      <p class="impact" style="color:var(--wm-teal);">Impact: Eliminates cross-building trips for associates • Eric: "Solve this, and you'd solve a lot of problems"</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card-header"><h3>Implementation Considerations</h3></div>
+    <div class="grid-2">
+      <div class="callout callout-blue">
+        <h4>Design for Adoption, Not Just Capability</h4>
+        <ul class="clean">
+          <li>"If it's the desktop version shrunk down, that would be awful" — Adriana</li>
+          <li>"Any extra click is enough to cause someone to go, 'oh, that doesn't work'" — Marvin</li>
+          <li>Require Face ID / biometric login, not typed passwords in cold environments</li>
+          <li>Must not time out during active use — 12+ hour sessions</li>
+          <li>"A small amount of training on the front end will eliminate months of rework after launch" — Marvin</li>
+        </ul>
+      </div>
+      <div class="callout callout-orange">
+        <h4>Adoption Barriers to Watch</h4>
+        <ul class="clean">
+          <li><strong>Human resistance to change:</strong> "People don't like to change" — Robert (Atlas rollout experience)</li>
+          <li><strong>BYOD non-adoption:</strong> Not everyone opts in; TC70/TC21 fallback needed</li>
+          <li><strong>Feature completeness:</strong> "Omitting information some managers need but others don't" would cause failure — Robert</li>
+          <li><strong>Accidental actions:</strong> Small-screen accidental touches could cause unintended trailer moves — Marvin</li>
+          <li><strong>Role-based access:</strong> Associates need limited views; full YMS on associate devices = risk — Dylan & Eric</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Roadmap Prioritization Summary</h3></div>
+    <table>
+      <thead><tr><th>Priority</th><th>Initiative</th><th>Effort</th><th>Impact</th><th>Addresses</th></tr></thead>
+      <tbody>
+        <tr><td><span class="priority-high">P0</span></td><td>Mobile YMS (core trailer ops)</td><td>Large</td><td>Very High</td><td>8/8 participants, 60-80% of desk trips</td></tr>
+        <tr><td><span class="priority-high">P0</span></td><td>Push notifications (arrivals, TUP, reefer, CRO)</td><td>Medium</td><td>Very High</td><td>Transforms passive → active alert model</td></tr>
+        <tr><td><span class="priority-med">P1</span></td><td>1-Tap LOS shutoff</td><td>Small</td><td>High</td><td>Adriana: 45-50x/day; all LOS-tracking AMs</td></tr>
+        <tr><td><span class="priority-med">P1</span></td><td>Unified trailer info view</td><td>Medium</td><td>High</td><td>Eliminates 3-system cross-referencing</td></tr>
+        <tr><td><span class="priority-low">P2</span></td><td>Auto door map from YMS</td><td>Medium</td><td>Medium</td><td>Team self-direction; Shawn's #1 workaround</td></tr>
+        <tr><td><span class="priority-low">P2</span></td><td>Mobile label reprinting</td><td>Medium</td><td>Medium</td><td>Dylan & Eric: associate cross-building trips</td></tr>
+        <tr><td><span class="priority-low">P2</span></td><td>Atlas mobile app access fix</td><td>Small</td><td>Medium</td><td>Existing app blocked at facility level</td></tr>
+        <tr><td style="color:var(--gray-500);">P3</td><td>CRO packet readiness dashboard</td><td>Small</td><td>Medium</td><td>Josh's #1 pain point; facility-specific</td></tr>
+        <tr><td style="color:var(--gray-500);">P3</td><td>Touchscreen-compatible cold-weather gloves</td><td>Small</td><td>Low-Med</td><td>Associates cutting fingertips off gloves</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 12: APPENDIX -->
+<!-- ============================================ -->
+<section id="appendix">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>Appendix</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Systems Glossary</h3></div>
+    <table>
+      <thead><tr><th>System</th><th>Full Name / Purpose</th><th>Mobile Today?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>YMS</strong></td><td>Yard Management System — trailer-to-door assignments, inbound viewer, TUP/TOP, LOS tracking, move queue</td><td>Desktop only (biggest gap)</td></tr>
+        <tr><td><strong>GDM</strong></td><td>Global Delivery Management — delivery details, POs, LOS reports, OSDR, volume tracking</td><td>Desktop only</td></tr>
+        <tr><td><strong>Atlas</strong></td><td>Inventory/receiving system (replaced GLS) — scanning, pallet splits, receiving, label printing</td><td>Partial (TC21/TC70, web limited)</td></tr>
+        <tr><td><strong>GLS</strong></td><td>Legacy system replaced by Atlas — Eric ran on 2 tabs vs. Atlas needs 6+</td><td>Retired</td></tr>
+        <tr><td><strong>CRO</strong></td><td>Central Receiving Office — packet processing, BOL management</td><td>Physical process</td></tr>
+        <tr><td><strong>GTA</strong></td><td>Global Time & Attendance — hours, attendance, call-out log</td><td>Desktop / limited mobile</td></tr>
+        <tr><td><strong>InfoLink</strong></td><td>Equipment monitoring — lockouts for safety violations (seatbelt, speed)</td><td>Email alerts only</td></tr>
+        <tr><td><strong>Win the Day</strong></td><td>Daily planning/execution dashboard</td><td>Desktop only</td></tr>
+        <tr><td><strong>Workday</strong></td><td>HR system — scheduling, training, CBLs</td><td>Has mobile app</td></tr>
+        <tr><td><strong>Tableau</strong></td><td>Business intelligence — multiple dashboards for DMS prep</td><td>Limited</td></tr>
+        <tr><td><strong>TC21 / TC70</strong></td><td>Zebra handheld devices — scanning, Atlas access, limited YMS</td><td>Handheld (not phone/tablet)</td></tr>
+        <tr><td><strong>SWIFL</strong></td><td>Standard Work For Leaders — structured task frameworks by role</td><td>Document-based</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Notable Participant Quotes — Extended</h3></div>
+
+    <details>
+      <summary>Shawn Patzner — On the custom door map workaround</summary>
+      <div class="detail-body">
+        <div class="quote">We are just physically going in [to update it]... I'm doing that visually every single time throughout the day.<span class="quote-attr">— Shawn Patzner</span></div>
+        <div class="quote">When I do Code Puppy and I asked it to try to work with YMS, it just tells it doesn't have access to integrate with YMS.<span class="quote-attr">— Shawn Patzner, on trying to automate the door map</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Adriana Flores — On the LOS walk problem</summary>
+      <div class="detail-body">
+        <div class="quote">Sometimes I actually have to say, I just didn't get to my computer in time to shut it off.<span class="quote-attr">— Adriana Flores</span></div>
+        <div class="quote">Potentially, we wouldn't have to go back to a desktop at all. We could be on the floor the entire time.<span class="quote-attr">— Adriana Flores</span></div>
+        <div class="quote">I want all of the YMS access mobile, but I want it user-friendly.<span class="quote-attr">— Adriana Flores</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Robert Martin III — On adoption barriers</summary>
+      <div class="detail-body">
+        <div class="quote">People don't like to change. That is, I think, probably the biggest barrier.<span class="quote-attr">— Robert Martin III</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Marvin Larrabee — On UX simplicity</summary>
+      <div class="detail-body">
+        <div class="quote">Any extra click that's required is gonna be enough to cause somebody to go, 'oh, that doesn't work for me and I don't like using it.'<span class="quote-attr">— Marvin Larrabee</span></div>
+        <div class="quote">End users get confused very easily. Things like having to choose from the dropdown, whether it's a pallet ID, an item number, or a UPC before searching for it honestly creates a lot of headache.<span class="quote-attr">— Marvin Larrabee</span></div>
+        <div class="quote">A small amount of training on the front end will eliminate several months worth of rework after launch.<span class="quote-attr">— Marvin Larrabee</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Eric Chan — On what would make or break adoption</summary>
+      <div class="detail-body">
+        <div class="quote">Make sure it doesn't time out... the biggest thing about Atlas is that it times out after 12 hours, where GLS would time out after what felt like 10 minutes.<span class="quote-attr">— Eric Chan</span></div>
+        <div class="quote">If you were to solve this [reprinting from handheld], you'd solve a lot of problems.<span class="quote-attr">— Eric Chan</span></div>
+        <div class="quote">It just comes down to money, right? So I have a whole team of 15 people in a 10-hour day. All their wages combined for a whole day doesn't even pay for four of those pallets off that ice cream truck.<span class="quote-attr">— Eric Chan, on freezer freight priority</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Josh Bales — On the record-breaking day</summary>
+      <div class="detail-body">
+        <div class="quote">Hitting 212, I just broke my previous record by 6000 cases. I missed one LOS by 3 minutes. That's all I missed for the whole day.<span class="quote-attr">— Josh Bales</span></div>
+        <div class="quote">The day that I did 212, I was on equipment all day. There's no way I'm doing all this with just walking back and forth.<span class="quote-attr">— Josh Bales</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Shawn Patzner — On what makes a perfect day</summary>
+      <div class="detail-body">
+        <div class="quote">The busiest days are actually our best days because you just run it fully staffed and you don't worry about it too much.<span class="quote-attr">— Shawn Patzner</span></div>
+        <div class="quote">Manager interference is not much needed. You are just there to talk to your associates. That's just how good that day is.<span class="quote-attr">— Shawn Patzner</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>FDDR Standard Work For Leaders — Daily Schedule</h3></div>
+    <p class="text-sm text-muted mb-8">Source: FDDR SWFL.xlsx — WE FDDR Shift 4</p>
+    <table>
+      <thead><tr><th>Time</th><th>Action</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td>2:00 AM</td><td>Shift Setup (Identify workload, IVR, YMS, equipment, emails)</td><td>Office/Floor</td></tr>
+        <tr><td>3:00 AM</td><td>Startup</td><td>FDDR Office</td></tr>
+        <tr><td>3:30 AM</td><td>Update CPH Planner</td><td>Office</td></tr>
+        <tr><td>4:00 AM</td><td>Check SPOC Report</td><td>Office</td></tr>
+        <tr><td>7:00 AM</td><td>Team Check-In</td><td>Floor</td></tr>
+        <tr><td>7:30 AM</td><td>Eat Breakfast</td><td>Breakroom</td></tr>
+        <tr><td>8:15 AM</td><td>Safety Blitz</td><td>Floor</td></tr>
+        <tr><td>9:00 AM</td><td>Team Check-In</td><td>Floor</td></tr>
+        <tr><td>9:15 AM</td><td>Update Ops DMS Slides</td><td>Office</td></tr>
+        <tr><td>9:30 AM</td><td>Eat Lunch</td><td>Anywhere</td></tr>
+        <tr><td>10:00 AM</td><td>Daily Ops Board DMS Review</td><td>Meeting Room</td></tr>
+        <tr><td>11:00 AM</td><td>Team Check-In</td><td>Floor</td></tr>
+        <tr><td>12:00 PM</td><td>Safety Observation</td><td>Floor</td></tr>
+        <tr><td>Last Hour</td><td>Office Hours (end-of-day admin, PTS, TPR, passdown)</td><td>FDDR Office</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Research Materials Inventory</h3></div>
+    <table>
+      <thead><tr><th>Document</th><th>Type</th><th>Key Contribution</th></tr></thead>
+      <tbody>
+        <tr><td>DC Leadership North Star Mobile Experience Research Study Plan</td><td>PDF</td><td>Research goals, methodology, participant criteria</td></tr>
+        <tr><td>DC Leadership North Star Mobile Experience Research Moderator's Guide</td><td>PDF</td><td>Interview framework, Alert→Insight→Action model definition</td></tr>
+        <tr><td>Brittany Hagans Transcript</td><td>MD</td><td>Meat & Produce AM — desk runner model, tablet preference</td></tr>
+        <tr><td>Robert Martin III Transcript</td><td>MD</td><td>FDD AM — no BYOD, phone preference, adoption barriers</td></tr>
+        <tr><td>Josh Bales Transcript</td><td>PDF</td><td>FDD AM — CRO packet pain, desk not on dock, record volumes</td></tr>
+        <tr><td>Shawn Patzner Transcript</td><td>PDF</td><td>FDD 2nd Shift — TC21 preference, custom door map, 5 devices</td></tr>
+        <tr><td>Adriana Flores Transcript</td><td>PDF</td><td>M&P AM — 45-50 LOS/day, "half-mile walk," no desk runner</td></tr>
+        <tr><td>Marvin Larrabee Transcript + Follow-Up</td><td>PDF × 2</td><td>Ops Manager — UX simplicity, phone preference, tablet failure history</td></tr>
+        <tr><td>Dylan Oakes & Eric Chan Transcript</td><td>PDF</td><td>Mechanized DC — label reprint gap, demand moves, role-based access</td></tr>
+        <tr><td>FDDR SWFL.xlsx</td><td>XLSX</td><td>Standard Work For Leaders — daily schedule & task checklist</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center; padding:40px 0; color:var(--gray-500); font-size:12px; border-top:1px solid var(--gray-200); margin-top:40px;">
+    <p>DC Leadership North Star — Mobile Experience Research Analysis Dashboard</p>
+    <p>Synthesized from 8 participant interviews, study framework, and supporting materials</p>
+    <p>Generated April 2026</p>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<!-- SCROLL-BASED NAV HIGHLIGHTING -->
+<script>
+  const navLinks = document.querySelectorAll('.sidenav a');
+  const sections = document.querySelectorAll('section');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 80;
+      if (scrollY >= sectionTop) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
